@@ -11,7 +11,7 @@ namespace Platform.WebApi.Controllers
     /// 默认控制器
     /// </summary>
     [Route("~/")]
-    //[HiddenApi]
+    [HiddenApi]
     public class HomeController : AbpController
     {
         /// <summary>
@@ -22,5 +22,6 @@ namespace Platform.WebApi.Controllers
         {
             return Redirect("~/swagger/index.html");
         }
+
     }
 }
