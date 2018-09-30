@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  platform.webapi:
+    image: ${DOCKER_REGISTRY}platformwebapi
+    build:
+      context: .
+      dockerfile: src\Platform.WebApi\Dockerfile
