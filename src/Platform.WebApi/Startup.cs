@@ -41,7 +41,7 @@ namespace Platform.WebApi
                     Version = "1.0.0",
                     TermsOfService = "CharmCheena"
                 }); 
-                //options.DocumentFilter<HiddenApiFilter>();
+                options.DocumentFilter<HiddenApiFilter>();
                 var xmls = GetXmls();
                 foreach (var xml in xmls)
                 {
