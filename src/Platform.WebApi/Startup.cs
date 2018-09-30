@@ -62,12 +62,12 @@ namespace Platform.WebApi
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             });
 
-            ////设置全局JSON时间格式
-            //services.PostConfigure<MvcJsonOptions>(options =>
-            //{
-            //    options.SerializerSettings.ContractResolver = new DateFormatContractResolver();
-            //});
-            //services.Configure<MarketSettings>(Configuration.GetSection("MarketSettings"));
+            //设置全局JSON时间格式
+            services.PostConfigure<MvcJsonOptions>(options =>
+            {
+                options.SerializerSettings.ContractResolver = new DateFormatContractResolver();
+            });
+            services.Configure<GlobalSettings>(Configuration.GetSection("GlobalSettings"));
 
             //跨域配置
             //services.AddCors(options => options.AddPolicy("AllowHeaders", builder => builder.AllowAnyOrigin().AllowAnyHeader()

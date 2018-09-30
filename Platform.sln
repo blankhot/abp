@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Platform.Web.Tests", "test\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Platform.Common", "src\Platform.Common\Platform.Common.csproj", "{C4E53DC9-96D2-48F1-8EA7-053C3417D649}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Platform.WebApi", "src\Platform.WebApi\Platform.WebApi.csproj", "{4635F6E0-C1EE-46E1-92D3-79EF50EFC9E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Platform.WebApi", "src\Platform.WebApi\Platform.WebApi.csproj", "{4635F6E0-C1EE-46E1-92D3-79EF50EFC9E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
