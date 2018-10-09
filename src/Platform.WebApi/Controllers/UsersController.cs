@@ -14,8 +14,11 @@ namespace Platform.WebApi.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseController
     {
+        /// <summary>
+        /// 用户服务层
+        /// </summary>
         private readonly IUserService _userService;
 
         /// <summary>

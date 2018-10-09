@@ -19,4 +19,7 @@
     <PackageReference Include="Abp.AutoMapper" Version="3.8.3" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="HousePriceService\Dtos\" />
+  </ItemGroup>
 </Project>

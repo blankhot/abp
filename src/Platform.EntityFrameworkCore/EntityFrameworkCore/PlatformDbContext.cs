@@ -8,6 +8,10 @@ namespace Platform.EntityFrameworkCore
     {
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Role> Roles { get; set; }
+
+        public DbSet<UserRole> UserRoles { get; set; }
+
         //Add DbSet properties for your entities...
 
         public PlatformDbContext(DbContextOptions<PlatformDbContext> options) 
