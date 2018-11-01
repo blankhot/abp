@@ -1,4 +1,5 @@
 ﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,13 +7,13 @@ using System.Text;
 
 namespace Platform.Entity
 {
-    public class EntityBase : Entity<int>
+    public class EntityBase : Entity<int>,ISoftDelete,IHasCreationTime
     {
         /// <summary>
         /// 创建时间
         /// </summary>
         [Required]
-        public virtual DateTime CreateTime { get; set; }
+        public virtual DateTime CreationTime { get; set; }
         /// <summary>
         /// 创建人
         /// </summary>
@@ -31,6 +32,6 @@ namespace Platform.Entity
         /// <summary>
         /// 是否删除
         /// </summary>
-        public virtual int IsDelete { get; set; }
+        public virtual bool IsDeleted { get; set; }
     }
 }

@@ -72,9 +72,9 @@ namespace Platform.Entity
 
         public User()
         {
-            CreateTime = DateTime.Now;
+            CreationTime = DateTime.Now;
             ModifyTime = DateTime.Now;
-            IsDelete = 0;
+            IsDeleted = false;
         }
     }
 }

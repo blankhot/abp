@@ -37,14 +37,14 @@ namespace Platform.UserService
             {
                 if (ReturnObj.ResultStatus == ResponseStatus.OK)
                 {
-                    List<User> list = await _userRepository.GetAllListAsync(o => o.IsDelete == (int)IsDeleteStatus.No);
+                    List<User> list = await _userRepository.GetAllListAsync();
                     if (!string.IsNullOrEmpty(input.Name))
                     {
                         list = list.Where(o => o.RealName.Contains(input.Name)).ToList();
                     }
                     //分页
                     int TotalCount = list.Count;
-                    list = list.OrderByDescending(m => m.CreateTime).Take(input.Limit * input.Page).Skip(input.Limit * (input.Page - 1)).ToList();
+                    list = list.OrderByDescending(m => m.CreationTime).Take(input.Limit * input.Page).Skip(input.Limit * (input.Page - 1)).ToList();
                     List<UserDto> adminDtos = MapperHelper.ResultData<List<UserDto>, List<User>>(list);
 
                     UserPageOutput infoOutput = new UserPageOutput()
