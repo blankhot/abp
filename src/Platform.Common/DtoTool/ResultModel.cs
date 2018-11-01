@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Platform.DtoTool
+namespace Platform.Common.DtoTool
 { 
     public class ResultModel
     {

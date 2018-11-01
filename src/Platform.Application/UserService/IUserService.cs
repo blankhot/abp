@@ -1,4 +1,4 @@
-﻿using Platform.DtoTool;
+﻿using Platform.Common.DtoTool;
 using Platform.UserService.Dtos;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Platform.UserService
 {
-    public interface IUserService
+    public interface IUserService: IBaseService
     {
         /// <summary>
         /// 获取所有的用户

@@ -1,4 +1,4 @@
-﻿using Platform.DtoTool;
+﻿using Platform.Common.DtoTool;
 using System;
 using System.Collections.Generic;
 using System.Text;

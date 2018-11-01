@@ -1,6 +1,7 @@
 ﻿using Abp.AutoMapper;
 using Abp.Modules;
 using Abp.Reflection.Extensions;
+using Platform.Interceptor;
 
 namespace Platform
 {
@@ -26,7 +27,7 @@ namespace Platform
         public override void PreInitialize()
         {
             //配置初始化
-            //MarketInterceptorRegistrar.Initialize(IocManager.IocContainer.Kernel);
+            PlatformInterceptorRegistrar.Initialize(IocManager.IocContainer.Kernel);
         }
     }
 }

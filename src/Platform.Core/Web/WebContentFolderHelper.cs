@@ -29,7 +29,7 @@ namespace Platform.Web
                 directoryInfo = directoryInfo.Parent;
             }
 
-            return Path.Combine(directoryInfo.FullName, $"src{Path.DirectorySeparatorChar}Platform.Web");
+            return Path.Combine(directoryInfo.FullName, $"{Path.DirectorySeparatorChar}Platform.WebApi");
         }
 
         private static bool DirectoryContains(string directory, string fileName)

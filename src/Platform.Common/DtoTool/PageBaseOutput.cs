@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Platform.DtoTool
+namespace Platform.Common.DtoTool
 {
     /// <summary>
     /// 公共分页信息输出

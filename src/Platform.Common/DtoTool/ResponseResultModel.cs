@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Platform.DtoTool
+namespace Platform.Common.DtoTool
 {
     /// <summary>
     /// 输出时调用基类

@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Abp.AspNetCore;
+using Abp.Castle.Logging.Log4Net;
 using Abp.EntityFrameworkCore;
+using Castle.Facilities.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Platform.Common;
+using Platform.Common.Helper;
 using Platform.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -22,9 +26,11 @@ namespace Platform.WebApi
 {
     public class Startup
     {
+        private GlobalSettings _settings;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            _settings = AppSettingConfigHelper.GetAppSettings<GlobalSettings>();
         }
 
         public IConfiguration Configuration { get; }
@@ -36,11 +42,15 @@ namespace Platform.WebApi
             {
                 options.SwaggerDoc("v1", new Info()
                 {
-                    Title = "Api接口",
-                    Description = "Api接口",
-                    Version = "1.0.0",
-                    TermsOfService = "CharmCheena"
-                }); 
+                    Title = "Api",
+                    Description = "Api",
+                    Version = "1.0.0"
+                });
+                if (!_settings.IsRelease)
+                    options.SwaggerDoc(PlatformConsts.ManageName, 
+                        new Info() { Title = "Mange Api", Description = "方特投资有限公司版权所有", Version = PlatformConsts.ManageName });
+
+                //控制器接口的描述
                 options.DocumentFilter<HiddenApiFilter>();
                 var xmls = GetXmls();
                 foreach (var xml in xmls)
@@ -68,12 +78,8 @@ namespace Platform.WebApi
                 options.SerializerSettings.ContractResolver = new DateFormatContractResolver();
             });
             services.Configure<GlobalSettings>(Configuration.GetSection("GlobalSettings"));
-
-            //跨域配置
-            //services.AddCors(options => options.AddPolicy("AllowHeaders", builder => builder.AllowAnyOrigin().AllowAnyHeader()
-            //    .WithMethods(new[] { HttpMethods.Get, HttpMethods.Post }))
-            //);
-
+            
+            //跨域
             services.AddCors(options =>
             {
                 // BEGIN01
@@ -83,92 +89,18 @@ namespace Platform.WebApi
                     //builder.WithOrigins("http://example.com", "http://www.contoso.com");
                     builder.AllowAnyOrigin().AllowAnyHeader().AllowCredentials().WithMethods(new[] { HttpMethods.Get, HttpMethods.Post });
                 });
-                // END01
-
-                // BEGIN02
-                //options.AddPolicy("AllowAllOrigins",
-                //    builder =>
-                //    {
-                //        builder.WithOrigins("http://ftwx.fangte.com", "https://market.fangte.com").AllowAnyOrigin().AllowAnyHeader().AllowAnyOrigin().AllowCredentials().WithMethods(new[] { HttpMethods.Get, HttpMethods.Post });
-                //    });
-                // END02
-
-                //// BEGIN03
-                //options.AddPolicy("AllowSpecificMethods",
-                //    builder =>
-                //    {
-                //        builder.WithOrigins("http://example.com")
-                //               .WithMethods("GET", "POST", "HEAD");
-                //    });
-                //// END03
-
-                //// BEGIN04
-                //options.AddPolicy("AllowAllMethods",
-                //    builder =>
-                //    {
-                //        builder.WithOrigins("http://example.com")
-                //               .AllowAnyMethod();
-                //    });
-                //// END04
-
-                // BEGIN05
-                //options.AddPolicy("AllowHeaders",
-                //    builder =>
-                //    {
-                //        builder.WithOrigins("http://example.com")
-                //               .WithHeaders("accept", "content-type", "origin", "x-custom-header");
-                //    });
-                // END05
-
-                //// BEGIN06
-                //options.AddPolicy("AllowAllHeaders",
-                //    builder =>
-                //    {
-                //        builder.WithOrigins("http://example.com")
-                //               .AllowAnyHeader();
-                //    });
-                //// END06
-
-                //// BEGIN07
-                //options.AddPolicy("ExposeResponseHeaders",
-                //    builder =>
-                //    {
-                //        builder.WithOrigins("http://example.com")
-                //               .WithExposedHeaders("x-custom-header");
-                //    });
-                //// END07
-
-                //// BEGIN08
-                //options.AddPolicy("AllowCredentials",
-                //    builder =>
-                //    {
-                //        builder.WithOrigins("http://example.com")
-                //               .AllowCredentials();
-                //    });
-                //// END08
-
-                //// BEGIN09
-                //options.AddPolicy("SetPreflightExpiration",
-                //    builder =>
-                //    {
-                //        builder.WithOrigins("http://example.com")
-                //               .SetPreflightMaxAge(TimeSpan.FromSeconds(2520));
-                //    });
-                //// END09
             });
-
-
-
+            
             //注册IHttpContextAccessor
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             //Configure Abp and Dependency Injection
-            return services.AddAbp<PlatformWebModule>(options =>
+            return services.AddAbp<PlatformWebApiModule>(options =>
             {
-                ////Configure Log4Net logging
-                //options.IocManager.IocContainer.AddFacility<LoggingFacility>(
-                //    f => f.UseAbpLog4Net().WithConfig("log4net.config")
-                //);
+                //Configure Log4Net logging
+                options.IocManager.IocContainer.AddFacility<LoggingFacility>(
+                    f => f.UseAbpLog4Net().WithConfig("log4net.config")
+                );
             });
 
         }
@@ -177,9 +109,7 @@ namespace Platform.WebApi
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseAbp();
-            //app.UseCors("AllowHeaders");
             app.UseCors("AllowSpecificOrigins");
-            //app.UseCors("AllowAllOrigins");
 
             if (env.IsDevelopment())
             {
@@ -190,20 +120,28 @@ namespace Platform.WebApi
             app.UseMvc(builder => builder.MapRoute(
             name: "default",
             template: "{controller=Home}/{action=Index}/{id?}"));
-            //else
-            //{
-            //    app.UseExceptionHandler("/Error");
-            //}
-
-            //app.UseMvc();
 
             //注册HttpContext内容
             app.UseStaticHttpContext();
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "FangTeMarket Api");
+                if(!_settings.IsRelease)
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Platform Api");
             });
+            app.UseSwaggerUI(options =>
+            {
+                //根据配置文件显示
+                //自定义显示页面，显示其他分组需加url：?urls.primaryName=Manage
+                var currentAssembly = GetType().GetTypeInfo().Assembly;
+                options.IndexStream = () => currentAssembly.GetManifestResourceStream($"{currentAssembly.GetName().Name}.Swagger.index.html");//FangteHotels.WebApi.Swagger.index.html
+
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "FangteHotels Api");
+                if (!_settings.IsRelease)
+                    options.SwaggerEndpoint($"/swagger/{PlatformConsts.ManageName}/swagger.json", PlatformConsts.ManageName);
+            });
+
+
         }
         private IReadOnlyList<string> GetXmls()
         {

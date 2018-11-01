@@ -1,5 +1,5 @@
-﻿using Platform.Common.Helper;
-using Platform.DtoTool;
+﻿using Platform.Common.DtoTool;
+using Platform.Common.Helper;
 using Platform.Entity;
 using Platform.Enums;
 using Platform.IRepositories;
@@ -12,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace Platform.UserService
 {
-    public class UserService
+    public class UserService:IUserService
     {
         private readonly IUserRepository _userRepository;
         public UserService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-        }
+        }   
 
         /// <summary>
         /// 获取所有信息

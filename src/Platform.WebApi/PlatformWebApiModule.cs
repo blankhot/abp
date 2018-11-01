@@ -13,11 +13,11 @@ namespace Platform.WebApi
         typeof(PlatformApplicationModule), 
         typeof(PlatformEntityFrameworkCoreModule), 
         typeof(AbpAspNetCoreModule))]
-    public class PlatformWebModule : AbpModule
+    public class PlatformWebApiModule : AbpModule
     {
         private readonly IConfigurationRoot _appConfiguration;
 
-        public PlatformWebModule(IHostingEnvironment env)
+        public PlatformWebApiModule(IHostingEnvironment env)
         {
             _appConfiguration = AppConfigurations.Get(env.ContentRootPath, env.EnvironmentName);
         }
@@ -36,7 +36,7 @@ namespace Platform.WebApi
 
         public override void Initialize()
         {
-            IocManager.RegisterAssemblyByConvention(typeof(PlatformWebModule).GetAssembly());
+            IocManager.RegisterAssemblyByConvention(typeof(PlatformWebApiModule).GetAssembly());
         }
     }
 }
